@@ -1,98 +1,131 @@
-import java.util.Scanner;
-
 public class Bella {
-    private static final String DIVIDER = "____________________________________________________________\n";
-    public static void greet() {
-        String logo = "   __\n" +
-                "o-''|\\_____/)\n" +
-                " \\_/|_)     )\n" +
-                "    \\  __  /\n" +
-                "    (_/ (_/";
-        System.out.println(DIVIDER + "Howl you doing I'm Bella, your personal chatbot!\n" + logo);
+    private TaskList tasks;
+    private Ui ui;
+
+    public Bella() {
+        this.ui = new Ui();
+        this.tasks = new TaskList();
     }
 
-    public static void listTasks(Task[] taskList, int taskCount) {
-        if (taskCount != 0) {
-            System.out.println(DIVIDER);
-            for (int i = 0; i < taskCount; i++) {
-                System.out.println((i + 1) + ". " + taskList[i].description + " [" + taskList[i].getStatusIcon() + "]");
-            }
-            System.out.println(DIVIDER);
-        } else {
-            System.out.println(DIVIDER + "You haven't added anything yet! Woof!\n" + DIVIDER);
+    public void run() {
+        ui.showWelcome();
+
+        String input = ui.readCommand();
+        while (!input.equals("bye")) {
+            handleCommand(input);
+            input = ui.readCommand();
+        }
+
+        ui.showGoodbye();
+    }
+
+    private void handleCommand(String input) {
+        String command = Parser.parseCommand(input);
+
+        switch (command) {
+        case "list":
+            ui.showTaskList(tasks);
+            break;
+        case "mark":
+            handleMark(input, true);
+            break;
+        case "unmark":
+            handleMark(input, false);
+            break;
+        case "todo":
+            handleTodo(input);
+            break;
+        case "deadline":
+            handleDeadline(input);
+            break;
+        case "event":
+            handleEvent(input);
+            break;
+        default:
+            handleDefault(input);
+            break;
         }
     }
 
-    public static void manageTask() {
-        Task[] taskList = new Task[100];
-        int taskCount = 0;
-        Scanner in = new Scanner(System.in);
-
-        System.out.println("What can I do for you?\n" + DIVIDER);
-
-        String line = in.nextLine();
-        while (!line.equals("bye")) {
-            String[] parts = line.split(" ", 2);
-            String command = parts[0];
-
-            switch (command) {
-            case "list":
-                System.out.println(DIVIDER + "Here are the tasks in your list:\n");
-                listTasks(taskList, taskCount);
-                break;
-            case "mark":
-                if (parts.length > 1) {
-                    handleMarkTask(taskList, taskCount, parts[1], true);
-                } else {
-                    System.out.println(DIVIDER + "Please specify a task number to mark\n" + DIVIDER);
-                }
-                break;
-            case "unmark":
-                if (parts.length > 1) {
-                    handleMarkTask(taskList, taskCount, parts[1], false);
-                } else {
-                    System.out.println(DIVIDER + "Please specify a task number to mark\n" + DIVIDER);
-                }
-                break;
-            default:
-                taskList[taskCount] = new Task(line);
-                taskCount++;
-                System.out.println(DIVIDER + "I've added: " + line + "\n" + DIVIDER);
-            }
-
-            line = in.nextLine();
+    private void handleMark(String input, boolean isDone) {
+        String args = Parser.getArguments(input);
+        if (args.isEmpty()) {
+            String action = isDone ? "mark" : "unmark";
+            ui.showError("Please specify a task number to " + action);
+            return;
         }
-    }
 
-    private static void handleMarkTask(Task[] taskList, int taskCount, String taskNumStr, boolean isDone) {
         try {
-            int taskNum = Integer.parseInt(taskNumStr);
+            int taskNum = Parser.parseTaskNumber(input);
 
-            if (taskNum < 1 || taskNum > taskCount) {
-                System.out.println(DIVIDER + "Task number out of range!\n" + DIVIDER);
+            if (taskNum < 1 || taskNum > tasks.getCount()) {
+                ui.showError("Task number out of range!");
                 return;
             }
 
-            Task task = taskList[taskNum - 1];
+            Task task = tasks.get(taskNum - 1);
 
             if (isDone) {
                 task.mark();
-                System.out.println(DIVIDER + " Nice! I've marked this task as done:");
+                ui.showMarkedDone(task);
             } else {
                 task.unmark();
-                System.out.println(DIVIDER + " OK, I've marked this task as not done yet:");
+                ui.showMarkedUndone(task);
             }
-            System.out.println("   [" + task.getStatusIcon() + "] " + task.getDescription());
-            System.out.println(DIVIDER);
-
         } catch (NumberFormatException e) {
-            System.out.println(DIVIDER + "Please provide a valid task number!\n" + DIVIDER);
+            ui.showError("Please provide a valid task number!");
         }
     }
 
+    private void handleTodo(String input) {
+        String description = Parser.parseTodoDescription(input);
+        if (description.isEmpty()) {
+            return;
+        }
+        Task task = new Todo(description);
+        tasks.add(task);
+        ui.showTaskAdded(task, tasks.getCount());
+    }
+
+    private void handleDeadline(String input) {
+        String args = Parser.getArguments(input);
+        if (args.isEmpty()) {
+            return;
+        }
+
+        String[] parts = Parser.parseDeadline(input);
+        if (parts.length == 2) {
+            Task task = new Deadline(parts[0], parts[1]);
+            tasks.add(task);
+            ui.showTaskAdded(task, tasks.getCount());
+        } else {
+            ui.showError("Please use format: deadline <description> /by <date>");
+        }
+    }
+
+    private void handleEvent(String input) {
+        String args = Parser.getArguments(input);
+        if (args.isEmpty()) {
+            return;
+        }
+
+        String[] parts = Parser.parseEvent(input);
+        if (parts.length == 3) {
+            Task task = new Event(parts[0], parts[1], parts[2]);
+            tasks.add(task);
+            ui.showTaskAdded(task, tasks.getCount());
+        } else {
+            ui.showError("Please use format: event <description> /from <start> /to <end>");
+        }
+    }
+
+    private void handleDefault(String input) {
+        Task task = new Todo(input);
+        tasks.add(task);
+        ui.showError("I've added: " + input);
+    }
+
     public static void main(String[] args) {
-        greet();
-        manageTask();
-        System.out.println(DIVIDER + "Leaving the paw-ty? See you later!\n" + DIVIDER);
+        new Bella().run();
     }
 }
