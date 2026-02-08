@@ -1,13 +1,14 @@
 public class Parser {
+    public static int MAX_SPLIT_LENGTH = 2; //
 
     public static String parseCommand(String input) {
-        String[] parts = input.split(" ", 2);
+        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
         return parts[0];
     }
 
     public static String getArguments(String input) {
-        String[] parts = input.split(" ", 2);
-        return parts.length > 1 ? parts[1] : "";
+        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
+        return parts.length > 1 ? parts[1] : ""; // return second word and onwards
     }
 
     public static int parseTaskNumber(String input) throws NumberFormatException {
@@ -21,7 +22,7 @@ public class Parser {
 
     public static String[] parseDeadline(String input) {
         String args = getArguments(input);
-        return args.split(" /by ", 2);
+        return args.split(" /by ", MAX_SPLIT_LENGTH);
     }
 
     public static String[] parseEvent(String input) {

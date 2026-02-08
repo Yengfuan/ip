@@ -22,10 +22,6 @@ public class Ui {
         System.out.println(DIVIDER + "Leaving the paw-ty? See you later!\n" + DIVIDER);
     }
 
-    public void showLine() {
-        System.out.print(DIVIDER);
-    }
-
     public void showTaskList(TaskList tasks) {
         if (!tasks.isEmpty()) {
             System.out.println(DIVIDER);
