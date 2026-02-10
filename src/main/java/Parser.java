@@ -16,8 +16,12 @@ public class Parser {
         return Integer.parseInt(args);
     }
 
-    public static String parseTodoDescription(String input) {
-        return getArguments(input);
+    public static String parseTodoDescription(String input) throws EmptyFieldException {
+        String description =  getArguments(input);
+        if (description == null || description.trim().isEmpty()) {
+            throw new EmptyFieldException("Cannot process empty description!");
+        }
+        return description;
     }
 
     public static String[] parseDeadline(String input) {

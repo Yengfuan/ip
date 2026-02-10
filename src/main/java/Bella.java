@@ -20,6 +20,10 @@ public class Bella {
     }
 
     private void handleCommand(String input) {
+        if (input.trim().isEmpty()) {
+            ui.showError("Cannot process empty description!");
+            return;
+        }
         String command = Parser.parseCommand(input);
 
         switch (command) {
@@ -78,51 +82,62 @@ public class Bella {
     }
 
     private void handleTodo(String input) {
-        String description = Parser.parseTodoDescription(input);
-        if (description.isEmpty()) {
-            return;
+        try {
+            String description = Parser.parseTodoDescription(input);
+            Task task = new Todo(description);
+            tasks.add(task);
+            ui.showTaskAdded(task, tasks.getCount());
+        } catch (EmptyFieldException e) {
+            ui.showError(e.getMessage());
         }
-        Task task = new Todo(description);
-        tasks.add(task);
-        ui.showTaskAdded(task, tasks.getCount());
     }
 
     private void handleDeadline(String input) {
-        String args = Parser.getArguments(input);
-        if (args.isEmpty()) {
-            return;
-        }
+        try {
+            String args = Parser.getArguments(input);
+            if (args.isEmpty()) {
+                return;
+            }
 
-        String[] parts = Parser.parseDeadline(input);
-        if (parts.length == 2) {
-            Task task = new Deadline(parts[0], parts[1]);
-            tasks.add(task);
-            ui.showTaskAdded(task, tasks.getCount());
-        } else {
-            ui.showError("Please use format: deadline <description> /by <date>");
+            String[] parts = Parser.parseDeadline(input);
+            if (parts.length == 2) {
+                Task task = new Deadline(parts[0], parts[1]);
+                tasks.add(task);
+                ui.showTaskAdded(task, tasks.getCount());
+            } else {
+                ui.showError("Please use format: deadline <description> /by <date>");
+            }
+        } catch (EmptyFieldException e) {
+            ui.showError(e.getMessage());
         }
     }
 
     private void handleEvent(String input) {
-        String args = Parser.getArguments(input);
-        if (args.isEmpty()) {
-            return;
-        }
+        try {
+            String args = Parser.getArguments(input);
+            if (args.isEmpty()) {
+                return;
+            }
 
-        String[] parts = Parser.parseEvent(input);
-        if (parts.length == 3) {
-            Task task = new Event(parts[0], parts[1], parts[2]);
-            tasks.add(task);
-            ui.showTaskAdded(task, tasks.getCount());
-        } else {
-            ui.showError("Please use format: event <description> /from <start> /to <end>");
+            String[] parts = Parser.parseEvent(input);
+            if (parts.length == 3) {
+                Task task = new Event(parts[0], parts[1], parts[2]);
+                tasks.add(task);
+                ui.showTaskAdded(task, tasks.getCount());
+            } else {
+                ui.showError("Please use format: event <description> /from <start> /to <end>");
+            }
+        } catch (EmptyFieldException e) {
+            ui.showError(e.getMessage());
         }
     }
 
-    private void handleDefault(String input) {
-        Task task = new Todo(input);
-        tasks.add(task);
-        ui.showError("I've added: " + input);
+    private void handleDefault(String input) throws EmptyFieldException {
+        try {
+            System.out.println("Invalid command, try again!");
+        } catch (EmptyFieldException e) {
+            ui.showError(e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
