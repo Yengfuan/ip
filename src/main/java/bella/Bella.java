@@ -50,6 +50,9 @@ public class Bella {
         case "event":
             handleEvent(input);
             break;
+        case "delete":
+            handleDelete(input);
+            break;
         default:
             handleDefault(input);
             break;
@@ -131,6 +134,32 @@ public class Bella {
                 ui.showTaskAdded(task, tasks.getCount());
             } else {
                 ui.showError("Please use format: event <description> /from <start> /to <end>");
+            }
+        } catch (EmptyFieldException e) {
+            ui.showError(e.getMessage());
+        }
+    }
+
+    private void handleDelete(String input) throws EmptyFieldException{
+        try {
+            String args = Parser.getArguments(input);
+            if (args.isEmpty()) {
+                return;
+            }
+
+            try {
+                int taskNum = Parser.parseTaskNumber(input);
+                if (taskNum < 1 || taskNum > tasks.getCount()) {
+                    ui.showError("Task number out of range!");
+                    return;
+                }
+                int deletedTaskIndex = taskNum - 1;
+                Task deletedTask = tasks.get(deletedTaskIndex);
+                tasks.delete(deletedTaskIndex);
+                ui.showDeleted(deletedTask, tasks.getCount());
+
+            } catch (NumberFormatException e) {
+                ui.showError("Please provide a valid number!");
             }
         } catch (EmptyFieldException e) {
             ui.showError(e.getMessage());

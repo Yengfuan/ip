@@ -21,6 +21,8 @@ public class TaskList {
         return tasks.size();
     }
 
+    public void delete(int index) { tasks.remove(index); }
+
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
