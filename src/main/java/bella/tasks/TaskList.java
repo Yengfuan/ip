@@ -1,28 +1,29 @@
 package bella.tasks;
 
+import java.util.ArrayList;
+
 public class TaskList {
-    private final Task[] tasks;
-    private int count;
+    private final ArrayList<Task> tasks;
 
     public TaskList() {
-        this.tasks = new Task[100];
-        this.count = 0;
+        this.tasks = new ArrayList<Task>();
     }
 
     public void add(Task task) {
-        tasks[count] = task;
-        count++;
+        tasks.add(task);
     }
 
     public Task get(int index) {
-        return tasks[index];
+        return tasks.get(index);
     }
 
     public int getCount() {
-        return count;
+        return tasks.size();
     }
 
+    public void delete(int index) { tasks.remove(index); }
+
     public boolean isEmpty() {
-        return count == 0;
+        return tasks.isEmpty();
     }
 }
