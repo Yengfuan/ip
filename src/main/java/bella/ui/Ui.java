@@ -1,3 +1,8 @@
+package bella.ui;
+
+import bella.tasks.Task;
+import bella.tasks.TaskList;
+
 import java.util.Scanner;
 
 public class Ui {

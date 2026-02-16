@@ -1,3 +1,8 @@
+package bella;
+
+import bella.tasks.*;
+import bella.ui.Ui;
+
 public class Bella {
     private TaskList tasks;
     private Ui ui;
