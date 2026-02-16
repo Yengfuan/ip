@@ -2,38 +2,53 @@ package bella.storage;
 
 import bella.tasks.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
 
-public class Storage {
-    private final Path filePath;
+import static bella.Parser.parseTaskFromLine;
 
-    public Storage(String filepath) {
-        this.filePath = Paths.get(filepath);
+public class StorageFile {
+    private final File storageFile;
+
+    public StorageFile(String filePath) {
+        this.storageFile = new File(filePath);
     }
 
-    public void save(TaskList tasks) throws IOException {
-        Files.createDirectories(filePath.getParent());
-        Files.writeString(filePath, convertTasksToString(tasks));
-    }
-
-    public void load() throws IOException {
-        if (Files.exists(filePath)) {
-            // Read and parse tasks
+    public void writeToFile(TaskList tasks) throws IOException {
+        File directory = storageFile.getParentFile();
+        if (directory != null && !directory.exists()) {
+            directory.mkdirs();
         }
-    }
 
-    public String convertTasksToString(TaskList tasks) {
-        StringBuilder sb = new StringBuilder();
-
+        FileWriter fw = new FileWriter(storageFile);
         for (int i = 0; i < tasks.getCount(); i++) {
             Task task = tasks.get(i);
-            sb.append(taskToFileFormat(task));
-            sb.append(System.lineSeparator());
+            fw.write(taskToFileFormat(task));
+            fw.write(System.lineSeparator());
         }
 
-        return sb.toString();
+        fw.close();
+    }
+
+    public TaskList loadFromFile() throws IOException {
+        TaskList tasks = new TaskList();
+
+        if (!storageFile.exists()) {
+            return tasks;
+        }
+
+        try (Scanner scanner = new Scanner(storageFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Task task = parseTaskFromLine(line);
+                if (task != null) {
+                    tasks.add(task);
+                }
+            }
+        }
+        return tasks;
     }
 
     private String taskToFileFormat(Task task) {
@@ -44,12 +59,12 @@ public class Storage {
         if (task instanceof Todo) {
             type = "T";
             return type + " | " + markStatus + " | " + description;
-        } else if (task instanceof Deadline) {
+        } else if (task instanceof Deadline d) {
             type = "D";
-            return type + " | " + markStatus + " | " + description;
-        } else if (task instanceof Event) {
+            return type + " | " + markStatus + " | " + description + " | " + d.getBy();
+        } else if (task instanceof Event e) {
             type = "E";
-            return type + " | " + markStatus + " | " + description;
+            return type + " | " + markStatus + " | " + description + " | " + e.getFrom() + " | " + e.getTo();
         }
         return "";
     }

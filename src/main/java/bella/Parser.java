@@ -1,5 +1,10 @@
 package bella;
 
+import bella.tasks.Deadline;
+import bella.tasks.Event;
+import bella.tasks.Task;
+import bella.tasks.Todo;
+
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
 
@@ -34,5 +39,39 @@ public class Parser {
     public static String[] parseEvent(String input) {
         String args = getArguments(input);
         return args.split(" /from | /to ");
+    }
+
+    public static Task parseTaskFromLine(String line) {
+        String[] parts = line.split(" \\| ");
+
+        if (parts.length < 3) {
+            return null; //invalid format
+        }
+
+        String type = parts[0];
+        boolean isDone = parts[1].equals("1");
+        String description = parts[2];
+
+        Task task = null;
+
+        switch (type) {
+        case "T":
+            task = new Todo(description);
+            break;
+        case "D":
+            if (parts.length >= 4) {
+                task = new Deadline(description, parts[3]);
+            }
+            break;
+        case "E":
+            if (parts.length >= 5) {
+                task = new Event(description, parts[3], parts[4]);
+                break;
+            }
+        }
+        if (task != null & isDone) {
+            task.mark();
+        }
+        return task;
     }
 }

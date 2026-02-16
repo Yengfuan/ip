@@ -5,13 +5,21 @@ import bella.tasks.*;
 import bella.ui.Ui;
 
 import java.io.IOException;
+
 public class Bella {
     private TaskList tasks;
     private Ui ui;
+    private StorageFile storageFile;
 
     public Bella() {
         this.ui = new Ui();
-        this.tasks = new TaskList();
+        this.storageFile = new StorageFile("data/bella.txt");
+        try {
+            this.tasks = storageFile.loadFromFile();
+        } catch (IOException e) {
+            ui.showError("Error loading tasks, let's start with an empty list!");
+            this.tasks = new TaskList();
+        }
     }
 
     public void run() {
@@ -22,8 +30,15 @@ public class Bella {
             handleCommand(input);
             input = ui.readCommand();
         }
-
         ui.showGoodbye();
+    }
+
+    private void saveTasksToFile() {
+        try {
+            storageFile.writeToFile(tasks);
+        } catch (IOException e) {
+            ui.showError("Error saving tasks to file!");
+        }
     }
 
     private void handleCommand(String input) {
@@ -83,6 +98,7 @@ public class Bella {
                 task.unmark();
                 ui.showMarkedUndone(task);
             }
+            saveTasksToFile();
         } catch (NumberFormatException e) {
             ui.showError("Please provide a valid task number!");
         }
@@ -94,6 +110,7 @@ public class Bella {
             Task task = new Todo(description);
             tasks.add(task);
             ui.showTaskAdded(task, tasks.getCount());
+            saveTasksToFile();
         } catch (EmptyFieldException e) {
             ui.showError(e.getMessage());
         }
@@ -111,6 +128,7 @@ public class Bella {
                 Task task = new Deadline(parts[0], parts[1]);
                 tasks.add(task);
                 ui.showTaskAdded(task, tasks.getCount());
+                saveTasksToFile();
             } else {
                 ui.showError("Please use format: deadline <description> /by <date>");
             }
@@ -131,6 +149,7 @@ public class Bella {
                 Task task = new Event(parts[0], parts[1], parts[2]);
                 tasks.add(task);
                 ui.showTaskAdded(task, tasks.getCount());
+                saveTasksToFile();
             } else {
                 ui.showError("Please use format: event <description> /from <start> /to <end>");
             }
