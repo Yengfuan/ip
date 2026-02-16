@@ -1,3 +1,5 @@
+package bella;
+
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
 
