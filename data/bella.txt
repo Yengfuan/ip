@@ -1,4 +1,3 @@
 T | 0 | hello
-T | 1 | whatsup
 D | 0 | ee2026 quiz | 22 feb
 E | 0 | cny | tmr | thurs

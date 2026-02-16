@@ -178,7 +178,7 @@ public class Bella {
                 Task deletedTask = tasks.get(deletedTaskIndex);
                 tasks.delete(deletedTaskIndex);
                 ui.showDeleted(deletedTask, tasks.getCount());
-
+                saveTasksToFile();
             } catch (NumberFormatException e) {
                 ui.showError("Please provide a valid number!");
             }
