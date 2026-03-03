@@ -7,11 +7,14 @@ import bella.tasks.TaskList;
 import bella.ui.Ui;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AddDeadlineCommand extends Command {
-    String description, by;
+    String description;
+    LocalDateTime by;
 
-    public AddDeadlineCommand(String description, String by) {
+    public AddDeadlineCommand(String description, LocalDateTime by) {
         this.description = description;
         this.by = by;
     }

@@ -6,6 +6,11 @@ import bella.tasks.Event;
 import bella.tasks.Task;
 import bella.tasks.Todo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
@@ -36,14 +41,19 @@ public class Parser {
         }
     }
 
+    public static String getArguments(String input) {
+        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
+        return parts.length > 1 ? parts[1] : ""; // return second word and onwards
+    }
+
     public static String parseCommand(String input) {
         String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
         return parts[0];
     }
 
-    public static String getArguments(String input) {
-        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
-        return parts.length > 1 ? parts[1] : ""; // return second word and onwards
+    public static LocalDateTime parseStringToDateTime(String dateTime) throws DateTimeParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+        return LocalDateTime.parse(dateTime, formatter);
     }
 
     public static int parseTaskNumber(String input) throws NumberFormatException {
@@ -88,16 +98,18 @@ public class Parser {
             break;
         case "D":
             if (parts.length >= 4) {
-                task = new Deadline(description, parts[3]);
+                task = new Deadline(description, parseStringToDateTime(parts[3]));
             }
             break;
         case "E":
             if (parts.length >= 5) {
-                task = new Event(description, parts[3], parts[4]);
+                task = new Event(description,
+                        parseStringToDateTime(parts[3]),
+                        parseStringToDateTime(parts[4]));
                 break;
             }
         }
-        if (task != null & isDone) {
+        if (task != null && isDone) {
             task.mark();
         }
         return task;

@@ -7,13 +7,17 @@ import bella.tasks.TaskList;
 import bella.ui.Ui;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static bella.Parser.parseStringToDateTime;
 
 public class AddEventCommand extends Command {
     String description;
-    String from;
-    String to;
+    LocalDateTime from;
+    LocalDateTime to;
 
-    public AddEventCommand(String description, String from, String to) {
+    public AddEventCommand(String description, LocalDateTime from, LocalDateTime to) {
         this.description = description;
         this.from = from;
         this.to = to;
