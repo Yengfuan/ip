@@ -10,10 +10,11 @@ public class Bella {
     private TaskList tasks;
     private Ui ui;
     private StorageFile storageFile;
+    private static final String FILE_PATH = "./data/bella.txt";
 
     public Bella() {
         this.ui = new Ui();
-        this.storageFile = new StorageFile("data/bella.txt");
+        this.storageFile = new StorageFile(FILE_PATH);
         try {
             this.tasks = storageFile.loadFromFile();
         } catch (IOException e) {
