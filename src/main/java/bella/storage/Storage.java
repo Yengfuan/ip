@@ -5,15 +5,14 @@ import bella.tasks.*;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import static bella.Parser.parseTaskFromLine;
 
-public class StorageFile {
+public class Storage {
     private final File storageFile;
 
-    public StorageFile(String filePath) {
+    public Storage(String filePath) {
         this.storageFile = new File(filePath);
     }
 
