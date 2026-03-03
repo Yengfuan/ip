@@ -8,18 +8,17 @@ import bella.ui.Ui;
 import java.io.IOException;
 
 public class ToggleMarkStatusCommand extends Command {
-    String taskNum;
+    int taskIndex;
     boolean isDone;
 
-    public ToggleMarkStatusCommand(String taskNum, boolean isDone) {
-        this.taskNum = taskNum;
+    public ToggleMarkStatusCommand(int taskIndex, boolean isDone) {
+        this.taskIndex = taskIndex;
         this.isDone = isDone;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            int taskIndex = Integer.parseInt(taskNum);
             if (taskIndex < 1 || taskIndex > tasks.getCount()) {
                 ui.showError("Task number out of range!");
                 return;
@@ -35,8 +34,6 @@ public class ToggleMarkStatusCommand extends Command {
                 ui.showMarkedUndone(task);
             }
             storage.writeToFile(tasks);
-        } catch (NumberFormatException e) {
-            ui.showError("Please enter a number!");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

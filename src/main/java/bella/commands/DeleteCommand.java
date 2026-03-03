@@ -8,15 +8,14 @@ import bella.ui.Ui;
 import java.io.IOException;
 
 public class DeleteCommand extends Command {
-    String taskNum;
-    public DeleteCommand(String taskNum) {
-        this.taskNum = taskNum;
+    int taskIndex;
+    public DeleteCommand(int taskIndex) {
+        this.taskIndex = taskIndex;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         try {
-            int taskIndex = Integer.parseInt(taskNum);
             if (taskIndex < 1 || taskIndex > tasks.getCount()) {
                 ui.showError("Task number out of range!");
                 return;

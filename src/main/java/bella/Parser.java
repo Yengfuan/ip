@@ -6,6 +6,11 @@ import bella.tasks.Event;
 import bella.tasks.Task;
 import bella.tasks.Todo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
@@ -13,7 +18,7 @@ public class Parser {
     public static Command parse(String input) {
         try {
             String command = parseCommand(input);
-            String taskNum;
+            int taskIndex;
             switch (command) {
             case "todo": return CommandProducer.createTodo(input);
             case "deadline": return CommandProducer.createDeadline(input);
@@ -21,14 +26,14 @@ public class Parser {
             case "list": return new ListCommand();
             case "bye": return new ExitCommand();
             case "delete":
-                taskNum = getArguments(input);
-                return new DeleteCommand(taskNum);
+                taskIndex = parseTaskNumber(input);
+                return new DeleteCommand(taskIndex);
             case "mark":
-                taskNum = getArguments(input);
-                return new ToggleMarkStatusCommand(taskNum, true);
+                taskIndex = parseTaskNumber(input);
+                return new ToggleMarkStatusCommand(taskIndex, true);
             case "unmark":
-                taskNum = getArguments(input);
-                return new ToggleMarkStatusCommand(taskNum, false);
+                taskIndex = parseTaskNumber(input);
+                return new ToggleMarkStatusCommand(taskIndex, false);
             default: return new InvalidCommand("Invalid command, try again!");
             }
         } catch (Exception e) {
@@ -36,14 +41,19 @@ public class Parser {
         }
     }
 
+    public static String getArguments(String input) {
+        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
+        return parts.length > 1 ? parts[1] : ""; // return second word and onwards
+    }
+
     public static String parseCommand(String input) {
         String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
         return parts[0];
     }
 
-    public static String getArguments(String input) {
-        String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
-        return parts.length > 1 ? parts[1] : ""; // return second word and onwards
+    public static LocalDateTime parseStringToDateTime(String dateTime) throws DateTimeParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+        return LocalDateTime.parse(dateTime, formatter);
     }
 
     public static int parseTaskNumber(String input) throws NumberFormatException {
@@ -88,16 +98,18 @@ public class Parser {
             break;
         case "D":
             if (parts.length >= 4) {
-                task = new Deadline(description, parts[3]);
+                task = new Deadline(description, parseStringToDateTime(parts[3]));
             }
             break;
         case "E":
             if (parts.length >= 5) {
-                task = new Event(description, parts[3], parts[4]);
+                task = new Event(description,
+                        parseStringToDateTime(parts[3]),
+                        parseStringToDateTime(parts[4]));
                 break;
             }
         }
-        if (task != null & isDone) {
+        if (task != null && isDone) {
             task.mark();
         }
         return task;

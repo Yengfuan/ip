@@ -10,84 +10,76 @@ ____________________________________________________________
 
 ____________________________________________________________
  Got it. I've added this task:
-   [T][ ] read book
+   [T][ ] cca admin work
  Now you have 1 tasks in the list.
 ____________________________________________________________
 
 ____________________________________________________________
  Got it. I've added this task:
-   [T][ ] return book
+   [D][ ] gec1041 submission (by: 2026-03-10 1200)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 
 ____________________________________________________________
  Got it. I've added this task:
-   [D][ ] return book (by: Sunday)
+   [E][ ] cg2023 midterm (from: 2026-03-05 1615 to: 2026-03-05 1715)
  Now you have 3 tasks in the list.
 ____________________________________________________________
 
 ____________________________________________________________
- Got it. I've added this task:
-   [E][ ] project meeting (from: Mon 2pm to: 4pm)
- Now you have 4 tasks in the list.
-____________________________________________________________
-
-____________________________________________________________
 
  Here are the tasks in your list:
- 1.[T][ ] read book
- 2.[T][ ] return book
- 3.[D][ ] return book (by: Sunday)
- 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+ 1.[T][ ] cca admin work
+ 2.[D][ ] gec1041 submission (by: 2026-03-10 1200)
+ 3.[E][ ] cg2023 midterm (from: 2026-03-05 1615 to: 2026-03-05 1715)
 ____________________________________________________________
 
 ____________________________________________________________
  Nice! I've marked this task as done:
-   [T][X] read book
+   [T][X] cca admin work
 ____________________________________________________________
 
 ____________________________________________________________
  Nice! I've marked this task as done:
-   [D][X] return book (by: Sunday)
-____________________________________________________________
-
-____________________________________________________________
-
- Here are the tasks in your list:
- 1.[T][X] read book
- 2.[T][ ] return book
- 3.[D][X] return book (by: Sunday)
- 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+   [D][X] gec1041 submission (by: 2026-03-10 1200)
 ____________________________________________________________
 
 ____________________________________________________________
  OK, I've marked this task as not done yet:
-   [T][ ] read book
+   [D][ ] gec1041 submission (by: 2026-03-10 1200)
+____________________________________________________________
+
+____________________________________________________________
+I've added: delete 3
 ____________________________________________________________
 
 ____________________________________________________________
 
  Here are the tasks in your list:
- 1.[T][ ] read book
- 2.[T][ ] return book
- 3.[D][X] return book (by: Sunday)
- 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+ 1.[T][X] cca admin work
+ 2.[D][ ] gec1041 submission (by: 2026-03-10 1200)
+ 3.[E][ ] cg2023 midterm (from: 2026-03-05 1615 to: 2026-03-05 1715)
+ 4.[T][ ] delete 3
 ____________________________________________________________
 
 ____________________________________________________________
- Got it. I've added this task:
-   [T][ ] join sports club
- Now you have 5 tasks in the list.
+Please use format: deadline <description> /by <date>
 ____________________________________________________________
 
 ____________________________________________________________
+Please use format: event <description> /from <start> /to <end>
+____________________________________________________________
 
- Here are the tasks in your list:
- 1.[T][ ] read book
- 2.[T][ ] return book
- 3.[D][X] return book (by: Sunday)
- 4.[E][ ] project meeting (from: Mon 2pm to: 4pm)
- 5.[T][ ] join sports club
+____________________________________________________________
+Please specify a task number to mark
+____________________________________________________________
+
+____________________________________________________________
+Please provide a valid task number!
+____________________________________________________________
+
+____________________________________________________________
+Task number out of range!
 ____________________________________________________________
 
 ____________________________________________________________

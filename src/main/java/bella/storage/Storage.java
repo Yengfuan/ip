@@ -5,6 +5,8 @@ import bella.tasks.*;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Scanner;
 
 import static bella.Parser.parseTaskFromLine;
@@ -55,16 +57,18 @@ public class Storage {
         String type;
         String markStatus = task.getStatusIcon().equals("X") ? "1" : "0";
         String description = task.getDescription();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
         if (task instanceof Todo) {
             type = "T";
             return type + " | " + markStatus + " | " + description;
         } else if (task instanceof Deadline d) {
             type = "D";
-            return type + " | " + markStatus + " | " + description + " | " + d.getBy();
+            return type + " | " + markStatus + " | " + description + " | " + d.getBy().format(formatter);
         } else if (task instanceof Event e) {
             type = "E";
-            return type + " | " + markStatus + " | " + description + " | " + e.getFrom() + " | " + e.getTo();
+            return type + " | " + markStatus + " | " + description + " | " +
+                    e.getFrom().format(formatter) + " | " + e.getTo().format(formatter);
         }
         return "";
     }
