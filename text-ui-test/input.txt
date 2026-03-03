@@ -1,13 +1,16 @@
-todo read book
-todo return book
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
+todo cca admin work
+deadline gec1041 submission /by 2026-03-10 1200
+event cg2023 midterm /from 2026-03-05 1615 /to 2026-03-05 1715
 list
 mark 1
-mark 3
+mark 2
+unmark 2
+delete 3
 list
-unmark 1
-list
-todo join sports club
-list
+todo
+deadline /by 2026-03-10 1200
+event /from 2026-03-05 1615 /to 2026-03-05 1715
+mark
+mark abc
+mark 99
 bye
