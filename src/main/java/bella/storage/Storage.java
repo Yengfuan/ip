@@ -5,6 +5,7 @@ import bella.tasks.*;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static bella.Parser.parseTaskFromLine;

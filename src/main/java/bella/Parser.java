@@ -1,12 +1,40 @@
 package bella;
 
+import bella.commands.*;
 import bella.tasks.Deadline;
 import bella.tasks.Event;
 import bella.tasks.Task;
 import bella.tasks.Todo;
 
+
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
+
+    public static Command parse(String input) {
+        try {
+            String command = parseCommand(input);
+            String taskNum;
+            switch (command) {
+            case "todo": return CommandProducer.createTodo(input);
+            case "deadline": return CommandProducer.createDeadline(input);
+            case "event": return CommandProducer.createEvent(input);
+            case "list": return new ListCommand();
+            case "bye": return new ExitCommand();
+            case "delete":
+                taskNum = getArguments(input);
+                return new DeleteCommand(taskNum);
+            case "mark":
+                taskNum = getArguments(input);
+                return new ToggleMarkStatusCommand(taskNum, true);
+            case "unmark":
+                taskNum = getArguments(input);
+                return new ToggleMarkStatusCommand(taskNum, false);
+            default: return new InvalidCommand("Invalid command, try again!");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static String parseCommand(String input) {
         String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
@@ -23,7 +51,7 @@ public class Parser {
         return Integer.parseInt(args);
     }
 
-    public static String parseTodoDescription(String input) throws EmptyFieldException {
+    public static String parseTodo(String input) throws EmptyFieldException {
         String description =  getArguments(input);
         if (description == null || description.trim().isEmpty()) {
             throw new EmptyFieldException("Cannot process empty description!");
