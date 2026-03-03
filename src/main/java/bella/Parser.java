@@ -13,7 +13,7 @@ public class Parser {
     public static Command parse(String input) {
         try {
             String command = parseCommand(input);
-            String taskNum;
+            int taskIndex;
             switch (command) {
             case "todo": return CommandProducer.createTodo(input);
             case "deadline": return CommandProducer.createDeadline(input);
@@ -21,14 +21,14 @@ public class Parser {
             case "list": return new ListCommand();
             case "bye": return new ExitCommand();
             case "delete":
-                taskNum = getArguments(input);
-                return new DeleteCommand(taskNum);
+                taskIndex = parseTaskNumber(input);
+                return new DeleteCommand(taskIndex);
             case "mark":
-                taskNum = getArguments(input);
-                return new ToggleMarkStatusCommand(taskNum, true);
+                taskIndex = parseTaskNumber(input);
+                return new ToggleMarkStatusCommand(taskIndex, true);
             case "unmark":
-                taskNum = getArguments(input);
-                return new ToggleMarkStatusCommand(taskNum, false);
+                taskIndex = parseTaskNumber(input);
+                return new ToggleMarkStatusCommand(taskIndex, false);
             default: return new InvalidCommand("Invalid command, try again!");
             }
         } catch (Exception e) {
