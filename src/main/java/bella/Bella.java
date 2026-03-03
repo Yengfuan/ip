@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class Bella {
     private TaskList tasks;
-    private Ui ui;
-    private Storage storage;
+    private final Ui ui;
+    private final Storage storage;
     private static final String FILE_PATH = "./data/bella.txt";
 
     public Bella() {
