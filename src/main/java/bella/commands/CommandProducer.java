@@ -8,7 +8,20 @@ import java.time.format.DateTimeParseException;
 
 import static bella.Parser.*;
 
+/**
+ * Factory class responsible for creating {@link Command} objects from raw user input.
+ *
+ * <p>Each method handles parsing and validation for a specific command type,
+ * returning an {@link InvalidCommand} if the input is malformed.</p>
+ */
 public class CommandProducer {
+
+    /**
+     * Creates an {@link AddTodoCommand} from the given input.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return An {@link AddTodoCommand} if valid, or an {@link InvalidCommand} if description is empty.
+     */
     public static Command createTodo(String input) {
         try {
             String description = parseTodo(input);
@@ -19,6 +32,13 @@ public class CommandProducer {
         }
     }
 
+    /**
+     * Creates an {@link AddDeadlineCommand} from the given input.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return An {@link AddDeadlineCommand} if valid, or an {@link InvalidCommand} if
+     *         the format is incorrect or the date is invalid.
+     */
     public static Command createDeadline(String input) {
         String[] parts = parseDeadline(input);
         boolean isStringEmpty = parts[0].trim().isEmpty();
@@ -35,6 +55,13 @@ public class CommandProducer {
         }
     }
 
+    /**
+     * Creates an {@link AddEventCommand} from the given input.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return An {@link AddEventCommand} if valid, or an {@link InvalidCommand} if
+     *         the format is incorrect or the dates are invalid.
+     */
     public static Command createEvent(String input) {
         String[] parts = parseEvent(input);
         boolean isStringEmpty = parts[0].trim().isEmpty();
