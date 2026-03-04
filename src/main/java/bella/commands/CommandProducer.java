@@ -1,5 +1,7 @@
 package bella.commands;
 
+import bella.EmptyFieldException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -8,11 +10,13 @@ import static bella.Parser.*;
 
 public class CommandProducer {
     public static Command createTodo(String input) {
-        String description = parseTodo(input);
-        if (description.trim().isEmpty()) {
-            return new InvalidCommand("Please provide a description for todo!");
+        try {
+            String description = parseTodo(input);
+            return new AddTodoCommand(description);
+        } catch (EmptyFieldException e) {
+            return new InvalidCommand(e.getMessage());
+
         }
-        return new AddTodoCommand(description);
     }
 
     public static Command createDeadline(String input) {
@@ -30,6 +34,7 @@ public class CommandProducer {
             return new InvalidCommand("Please provide a valid date in yyyy-MM-dd HHmm format!");
         }
     }
+
     public static Command createEvent(String input) {
         String[] parts = parseEvent(input);
         boolean isStringEmpty = parts[0].trim().isEmpty();

@@ -1,11 +1,11 @@
 todo cca admin work
-deadline gec1041 submission /by 2026-03-10 1200
-event cg2023 midterm /from 2026-03-05 1615 /to 2026-03-05 1715
+deadline ee2026 submission /by 2026-03-10 2359
+event ee2026 midterm /from 2026-03-06 0830 /to 2026-03-06 1000
 list
-mark 1
-mark 2
-unmark 2
-delete 3
+mark 4
+mark 5
+unmark 4
+delete 7
 list
 todo
 deadline /by 2026-03-10 1200
@@ -13,4 +13,6 @@ event /from 2026-03-05 1615 /to 2026-03-05 1715
 mark
 mark abc
 mark 99
+find submission
+find hello
 bye
