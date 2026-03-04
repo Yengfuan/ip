@@ -16,7 +16,6 @@ public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
 
     public static Command parse(String input) {
-        try {
             String command = parseCommand(input);
             int taskIndex;
             switch (command) {
@@ -39,9 +38,6 @@ public class Parser {
                 return new ToggleMarkStatusCommand(taskIndex, false);
             default: return new InvalidCommand("Invalid command, try again!");
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static String getArguments(String input) {
@@ -61,7 +57,11 @@ public class Parser {
 
     public static int parseTaskNumber(String input) throws NumberFormatException {
         String args = getArguments(input);
-        return Integer.parseInt(args);
+        try {
+            return Integer.parseInt(args);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     public static String parseTodo(String input) throws EmptyFieldException {
