@@ -26,4 +26,14 @@ public class TaskList {
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
+
+    public TaskList findByKeyword(String keyword) {
+        TaskList results = new TaskList();
+        for (int i = 0; i < getCount(); i++) {
+            if (tasks.get(i).getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                results.add(tasks.get(i));
+            }
+        }
+        return results;
+    }
 }

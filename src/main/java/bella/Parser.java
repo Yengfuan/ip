@@ -25,6 +25,9 @@ public class Parser {
             case "event": return CommandProducer.createEvent(input);
             case "list": return new ListCommand();
             case "bye": return new ExitCommand();
+            case "find":
+                String keyword = getArguments(input);
+                return new FindCommand(keyword);
             case "delete":
                 taskIndex = parseTaskNumber(input);
                 return new DeleteCommand(taskIndex);
