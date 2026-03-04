@@ -15,6 +15,12 @@ import java.time.format.DateTimeParseException;
 public class Parser {
     public static int MAX_SPLIT_LENGTH = 2; //
 
+    /**
+     * Parses the full user input and returns the corresponding {@link Command} to execute.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return The {@link Command} object corresponding to the parsed command.
+     */
     public static Command parse(String input) {
             String command = parseCommand(input);
             int taskIndex;
@@ -40,21 +46,47 @@ public class Parser {
             }
     }
 
+    /**
+     * Extracts the arguments following the command keyword from the input string.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return The substring after the first word, or an empty string if none exists.
+     */
     public static String getArguments(String input) {
         String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
         return parts.length > 1 ? parts[1] : ""; // return second word and onwards
     }
 
+    /**
+     * Extracts the command keyword from the input string.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return The first word of the input string as the command keyword.
+     */
     public static String parseCommand(String input) {
         String[] parts = input.split(" ", MAX_SPLIT_LENGTH);
         return parts[0];
     }
 
+    /**
+     * Parses a date-time string into a {@link LocalDateTime} object.
+     *
+     * @param dateTime Date-time string in {@code yyyy-MM-dd HHmm} format.
+     * @return The parsed {@link LocalDateTime} object.
+     * @throws DateTimeParseException If the string does not match the expected format.
+     */
     public static LocalDateTime parseStringToDateTime(String dateTime) throws DateTimeParseException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
         return LocalDateTime.parse(dateTime, formatter);
     }
 
+    /**
+     * Parses the task number from the input string.
+     * Returns -1 if the argument is not a valid integer.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return The parsed task number, or -1 if parsing fails.
+     */
     public static int parseTaskNumber(String input) throws NumberFormatException {
         String args = getArguments(input);
         try {
@@ -64,6 +96,14 @@ public class Parser {
         }
     }
 
+
+    /**
+     * Parses the todo description from the input string.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return The todo description string.
+     * @throws EmptyFieldException If the description is null or empty.
+     */
     public static String parseTodo(String input) throws EmptyFieldException {
         String description =  getArguments(input);
         if (description == null || description.trim().isEmpty()) {
@@ -72,16 +112,35 @@ public class Parser {
         return description;
     }
 
+    /**
+     * Splits the deadline input into description and date time components.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return A string array where index 0 is the description and index 1 is the date time.
+     */
     public static String[] parseDeadline(String input) {
         String args = getArguments(input);
         return args.split(" /by ", MAX_SPLIT_LENGTH);
     }
 
+    /**
+     * Splits the event input into description, start, and end time components.
+     *
+     * @param input Full raw input string entered by the user.
+     * @return A string array where index 0 is the description, index 1 is start, index 2 is end.
+     */
     public static String[] parseEvent(String input) {
         String args = getArguments(input);
         return args.split(" /from | /to ");
     }
 
+    /**
+     * Parses a single line from the storage file into a {@link Task} object.
+     * Returns null if the line is in an invalid format.
+     *
+     * @param line A single line read from the storage file.
+     * @return The corresponding {@link Task} object, or null if the format is invalid.
+     */
     public static Task parseTaskFromLine(String line) {
         String[] parts = line.split(" \\| ");
 

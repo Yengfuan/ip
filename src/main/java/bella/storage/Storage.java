@@ -6,18 +6,34 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Scanner;
 
 import static bella.Parser.parseTaskFromLine;
 
+/**
+ * Handles reading and writing of {@link TaskList} data to a file.
+ *
+ * <p>Tasks are stored in a pipe-delimited format and loaded back into memory on startup.</p>
+ */
 public class Storage {
     private final File storageFile;
 
+    /**
+     * Constructs a new {@code Storage} with the specified file path.
+     *
+     * @param filePath Path to the file used for persistent storage.
+     */
     public Storage(String filePath) {
         this.storageFile = new File(filePath);
     }
 
+    /**
+     * Writes all tasks in the given {@link TaskList} to the storage file.
+     * Creates the necessary directories if they do not exist.
+     *
+     * @param tasks The {@link TaskList} to save.
+     * @throws IOException If an error occurs while writing to the file.
+     */
     public void writeToFile(TaskList tasks) throws IOException {
         File directory = storageFile.getParentFile();
         if (directory != null && !directory.exists()) {
@@ -34,6 +50,13 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Loads tasks from the storage file into a {@link TaskList}.
+     * Returns an empty list if the file does not exist.
+     *
+     * @return A {@link TaskList} populated with tasks from the file.
+     * @throws IOException If an error occurs while reading the file.
+     */
     public TaskList loadFromFile() throws IOException {
         TaskList tasks = new TaskList();
 
@@ -53,6 +76,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Converts a {@link Task} into a pipe-delimited string for file storage.
+     *
+     * @param task The {@link Task} to convert.
+     * @return A formatted string representing the task, or an empty string if the type is unknown.
+     */
     private String taskToFileFormat(Task task) {
         String type;
         String markStatus = task.getStatusIcon().equals("X") ? "1" : "0";
